@@ -1,0 +1,6 @@
+.github export-ignore
+dist export-ignore
+build export-ignore
+*.spec export-ignore
+.venv export-ignore
+.git* export-ignore

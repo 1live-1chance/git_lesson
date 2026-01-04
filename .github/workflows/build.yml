@@ -45,7 +45,6 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      # --- Build step per OS ---
       - name: Build executable (Linux)
         if: runner.os == 'Linux'
         run: pyinstaller --onefile --windowed --name CoffeeManager --distpath dist main.py
@@ -58,7 +57,6 @@ jobs:
         if: runner.os == 'macOS'
         run: pyinstaller --onefile --windowed --name CoffeeManager --distpath dist main.py
 
-      # --- Rename step per OS ---
       - name: Rename executable (Linux)
         if: runner.os == 'Linux'
         run: mv dist/CoffeeManager dist/coffee-manager-linux
@@ -144,14 +142,10 @@ jobs:
 
       - name: Create source archive
         run: |
-          tar -czf coffee-manager-source-${{ steps.get_version.outputs.VERSION }}.tar.gz \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='.venv' \
-            --exclude='dist' \
-            --exclude='build' \
-            --exclude='*.spec' \
-            .
+          git archive --format=tar.gz \
+            --prefix=coffee-manager-${{ steps.get_version.outputs.VERSION }}/ \
+            -o coffee-manager-source-${{ steps.get_version.outputs.VERSION }}.tar.gz \
+            HEAD
 
       - name: Upload source archive to release
         uses: softprops/action-gh-release@v2
